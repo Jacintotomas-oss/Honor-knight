@@ -6,7 +6,7 @@ class Player:
         self.y = y
         self.speed = 200
         
-        self.image = pygame.image.load("assets/sprites/Tom/prota01.png"). convert_alpha()
+        self.image = pygame.image.load("assets/sprites/Tom/prota02.png"). convert_alpha()
         self.image = pygame.transform.scale(self.image, (128, 128))
     def handle_input(self,dt):
         keys = pygame.key.get_pressed()
