@@ -49,6 +49,8 @@ class Player:
         self.animation_timer = 0
         self.animation_speed = 0.15   # segundos por frame
 
+        self.rect = pygame.Rect(self.x, self.y, 128, 128)  # caja de colisiones pequeña
+
     # ──────────────────────────────────────────────
     def get_frame(self, col, row):
         """Extrae un frame del spritesheet y lo escala a 128x128."""
@@ -79,7 +81,7 @@ class Player:
             moving = True
         elif keys[pygame.K_s]:
             self.y += self.speed * dt
-            self.direction = "down"
+            self.direction = "right"
             moving = True
 
         if keys[pygame.K_a]:
@@ -88,9 +90,11 @@ class Player:
             moving = True
         elif keys[pygame.K_d]:
             self.x += self.speed * dt
-            self.direction = "right"
+            self.direction = "down"
             moving = True
 
+        #sincronizando el react con la posicion
+        self.rect.topleft = (int(self.x), int(self.y))
         if moving:
             self.animation_timer += dt
             if self.animation_timer >= self.animation_speed:
