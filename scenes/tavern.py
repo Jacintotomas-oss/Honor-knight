@@ -1,6 +1,7 @@
 import pygame
 from mecanicas.Player import Player
 from mecanicas.npc import NPC
+from mecanicas.tavernero import Tavernero
 
 class TavernScene:
     def __init__(self, game):
@@ -10,7 +11,11 @@ class TavernScene:
 
         # NPC estático del bardo en la taberna
         self.npcs = [
-            NPC(590, 340)  # bardo cerca de la barra
+            NPC(590, 340, "bardo")  # bardo cerca de la barra
+        ]
+        self.npcs = [
+        NPC(590, 340, "bardo"),
+        Tavernero()
         ]
 
         # Cargar la imagen de fondo de la taberna
@@ -18,18 +23,47 @@ class TavernScene:
 
         # Rectángulos de colisión del entorno
         self.obstaculos = [
-                        #98 esquina superior izquierda, 283 esquina superior derecha, 203 ancho, 142 alto
-            pygame.Rect(98, 283, 190, 112),  # zona 1 )
-            pygame.Rect(282, 529, 175, 130),  # zona 2
-            pygame.Rect(514, 276, 412, 24),  # zona 3 barra
-            pygame.Rect(769, 61, 230, 145),  # zona 4
-            pygame.Rect(471, 82, 287, 25),  # zona 5
+            pygame.Rect(98, 283, 190, 112),
+            pygame.Rect(282, 529, 175, 130),
+            pygame.Rect(514, 276, 412, 24),
+            pygame.Rect(769, 61, 230, 145),
+            pygame.Rect(471, 82, 287, 25),
             pygame.Rect(790, 451, 68, 399),
             pygame.Rect(61, 77, 698, 15),
-    ]
+        ]
 
     def handle_event(self, event):
-        pass
+        if event.type == pygame.KEYDOWN:
+
+            # E — activar diálogo o cerrar respuesta
+            if event.key == pygame.K_e:
+                for npc in self.npcs:
+                    distancia = abs(npc.rect.centerx - self.player.rect.centerx) + \
+                                abs(npc.rect.centery - self.player.rect.centery)
+                    if distancia < 150:
+                        if npc.respuesta_activa:
+                            npc.cerrar_respuesta()
+                        else:
+                            npc.activar()
+
+            # R — cerrar diálogo
+            if event.key == pygame.K_r:
+                for npc in self.npcs:
+                    npc.hablando = False
+                    npc.nodo_actual = "inicio"
+                    npc.esperando_opcion = False
+                    npc.respuesta_activa = None
+
+            # 1, 2, 3 — elegir opción de respuesta
+            if event.key == pygame.K_1:
+                for npc in self.npcs:
+                    npc.elegir_opcion(0)
+            if event.key == pygame.K_2:
+                for npc in self.npcs:
+                    npc.elegir_opcion(1)
+            if event.key == pygame.K_3:
+                for npc in self.npcs:
+                    npc.elegir_opcion(2)
 
     def update(self, dt):
         old_x = self.player.x
@@ -60,9 +94,8 @@ class TavernScene:
         self.player.draw(self.screen)
 
         # ── DEBUG: ver rectángulos de colisión ──
-        # Quita estas líneas cuando ya estén bien posicionados
-        #for obstaculo in self.obstaculos:
-         #   pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
-        #pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
-        #for npc in self.npcs:
-         #   pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
+        # for obstaculo in self.obstaculos:
+        #     pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
+        # pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
+        # for npc in self.npcs:
+        #     pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)

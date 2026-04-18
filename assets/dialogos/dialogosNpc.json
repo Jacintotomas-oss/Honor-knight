@@ -1,0 +1,87 @@
+{
+    "bardo": {
+        "inicio": {
+            "texto": "Bienvenido buen señor, ¿gusta una canción para entretenerse?",
+            "opciones": [
+                {
+                    "texto_tom": "Sí, me gustaría escuchar una canción.",
+                    "respuesta_npc": "¡Excelente! Déjeme tocar una balada de los caballeros del norte.",
+                    "siguiente": "despues_cancion"
+                },
+                {
+                    "texto_tom": "No gracias, solo estoy de paso.",
+                    "respuesta_npc": "Como guste, caballero. Aquí estaré si cambia de opinión.",
+                    "siguiente": "fin"
+                },
+                {
+                    "texto_tom": "¿Conoces canciones del rey Baerion?",
+                    "respuesta_npc": "¡Por supuesto! puedo cantar sobre su victoria en la bahia de Salt Fish en contra de la Triple sangre.",
+                    "siguiente": "baerion"
+                }
+            ]
+        },
+        "despues_cancion": {
+            "texto": "Espero que haya disfrutado la balada, caballero.",
+            "opciones": [
+                {
+                    "texto_tom": "Fue magnífica, gracias.",
+                    "respuesta_npc": "Es un honor tocar para alguien de su calibre.",
+                    "siguiente": "fin"
+                }
+            ]
+        },
+        "baerion": {
+            "texto": "El rey Baerion ganó todas las batallas que libró sin perder una sola.",
+            "opciones": [
+                {
+                    "texto_tom": "Impresionante, cuéntame más.",
+                    "respuesta_npc": "Dicen que su espada nunca tocó el suelo en derrota.",
+                    "siguiente": "fin"
+                },
+                {
+                    "texto_tom": "Gracias, es suficiente por ahora.",
+                    "respuesta_npc": "Cuando guste, aquí estaré.",
+                    "siguiente": "fin"
+                }
+            ]
+        }
+    },
+
+    "tavernero": {
+        "inicio": {
+            "texto": "Bienvenido mi buen señor, ¿qué le sirvo? Tengo cerveza y buen vino de las tierras Akron, también hay pato y cordero.",
+            "opciones": [
+                {
+                    "texto_tom": "Dame una cerveza.",
+                    "respuesta_npc": "Aquí tiene, la mejor cerveza de la región. ¡Que aproveche!",
+                    "siguiente": "fin"
+                },
+                {
+                    "texto_tom": "¿Tienes habitaciones disponibles?",
+                    "respuesta_npc": "25 créditos por noche, confortables y seguras. ¿Le reservo una?",
+                    "siguiente": "habitacion"
+                },
+                {
+                    "texto_tom": "Solo estoy mirando, gracias.",
+                    "respuesta_npc": "Como guste, caballero. Aquí estaré cuando me necesite.",
+                    "siguiente": "fin"
+                }
+            ]
+        },
+        "habitacion": {
+            "texto": "Tengo una disponible en el piso de arriba, tranquila y alejada del ruido de la taberna.",
+            "opciones": [
+                {
+                    "texto_tom": "La tomo, aquí están los 25 créditos.",
+                    "respuesta_npc": "Excelente elección. Que descanse bien, caballero.",
+                    "siguiente": "fin"
+                },
+                {
+                    "texto_tom": "Lo pensaré, quizás más tarde.",
+                    "respuesta_npc": "Sin prisa, aquí estaré toda la noche.",
+                    "siguiente": "fin"
+                }
+            ]
+        }
+    }
+}
