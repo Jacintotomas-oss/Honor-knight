@@ -1,5 +1,5 @@
 
-class wallet:
+class Wallet:
     def __init__(self, creditos_iniciales = 1000):
         self.creditos = creditos_iniciales
         self.deudas = [] #lista de {"acreedor": "tavernero", "monto": 100}

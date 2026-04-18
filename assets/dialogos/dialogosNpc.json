@@ -15,7 +15,7 @@
                 },
                 {
                     "texto_tom": "¿Conoces canciones del rey Baerion?",
-                    "respuesta_npc": "¡Por supuesto! puedo cantar sobre su victoria en la bahia de Salt Fish en contra de la Triple sangre.",
+                    "respuesta_npc": "¡Por supuesto! puedo cantar sobre su victoria sobre la triple sangre de braven en la bahia de Salt Fish.",
                     "siguiente": "baerion"
                 }
             ]
@@ -26,7 +26,7 @@
                 {
                     "texto_tom": "Fue magnífica, gracias.",
                     "respuesta_npc": "Es un honor tocar para alguien de su calibre.",
-                    "siguiente": "fin"
+                    "siguiente": "propina"
                 }
             ]
         },
@@ -36,12 +36,12 @@
                 {
                     "texto_tom": "Impresionante, cuéntame más.",
                     "respuesta_npc": "Dicen que su espada nunca tocó el suelo en derrota.",
-                    "siguiente": "fin"
+                    "siguiente": "propina"
                 },
                 {
                     "texto_tom": "Gracias, es suficiente por ahora.",
                     "respuesta_npc": "Cuando guste, aquí estaré.",
-                    "siguiente": "fin"
+                    "siguiente": "propina"
                 }
             ]
         }
@@ -49,37 +49,48 @@
 
     "tavernero": {
         "inicio": {
-            "texto": "Bienvenido mi buen señor, ¿qué le sirvo? Tengo cerveza y buen vino de las tierras Akron, también hay pato y cordero.",
+            "texto": "Bienvenido mi buen señor, ¿qué le sirvo? Tengo cerveza y buen vino de las tierras Akron.",
             "opciones": [
                 {
-                    "texto_tom": "Dame una cerveza.",
+                    "texto_tom": "Dame una cerveza. (5 cr)",
                     "respuesta_npc": "Aquí tiene, la mejor cerveza de la región. ¡Que aproveche!",
-                    "siguiente": "fin"
+                    "siguiente": "fin",
+                    "costo": 5
+                },
+                {
+                    "texto_tom": "Dame un vino de Akron. (15 cr)",
+                    "respuesta_npc": "Excelente elección, el mejor vino de las tierras Akron.",
+                    "siguiente": "fin",
+                    "costo": 15
                 },
                 {
                     "texto_tom": "¿Tienes habitaciones disponibles?",
                     "respuesta_npc": "25 créditos por noche, confortables y seguras. ¿Le reservo una?",
-                    "siguiente": "habitacion"
+                    "siguiente": "habitacion",
+                    "costo": 0
                 },
                 {
                     "texto_tom": "Solo estoy mirando, gracias.",
                     "respuesta_npc": "Como guste, caballero. Aquí estaré cuando me necesite.",
-                    "siguiente": "fin"
+                    "siguiente": "fin",
+                    "costo": 0
                 }
             ]
         },
         "habitacion": {
-            "texto": "Tengo una disponible en el piso de arriba, tranquila y alejada del ruido de la taberna.",
+            "texto": "Tengo una disponible en el piso de arriba, tranquila y alejada del ruido.",
             "opciones": [
                 {
                     "texto_tom": "La tomo, aquí están los 25 créditos.",
                     "respuesta_npc": "Excelente elección. Que descanse bien, caballero.",
-                    "siguiente": "fin"
+                    "siguiente": "fin",
+                    "costo": 25
                 },
                 {
                     "texto_tom": "Lo pensaré, quizás más tarde.",
                     "respuesta_npc": "Sin prisa, aquí estaré toda la noche.",
-                    "siguiente": "fin"
+                    "siguiente": "fin",
+                    "costo": 0
                 }
             ]
         }

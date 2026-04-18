@@ -2,7 +2,7 @@ import pygame
 from mecanicas.Player import Player
 from mecanicas.npc import NPC
 from mecanicas.tavernero import Tavernero
-from mecanicas.wallet import wallet
+from mecanicas.wallet import Wallet
 from mecanicas.inventario import Inventario
 
 class TavernScene:
@@ -10,16 +10,13 @@ class TavernScene:
         self.game = game
         self.screen = game.screen
         self.player = Player(100, 100)
-        self.wallet = wallet(creditos_iniciales=1000)
+        self.wallet = Wallet(creditos_iniciales=1000)
         self.inventario = Inventario(self.wallet)
 
-        # NPC estático del bardo en la taberna
+        # NPCs con wallet conectado
         self.npcs = [
-            NPC(590, 340, "bardo")  # bardo cerca de la barra
-        ]
-        self.npcs = [
-        NPC(590, 340, "bardo"),
-        Tavernero()
+            NPC(590, 340, "bardo", wallet=self.wallet),
+            Tavernero(wallet=self.wallet)
         ]
 
         # Cargar la imagen de fondo de la taberna
@@ -38,33 +35,48 @@ class TavernScene:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            #abrir y cerrar inventario
+
+            # Abrir/cerrar inventario
             if event.key == pygame.K_i:
                 self.inventario.toggle()
                 return
-            if self.inventario.visible:
-                return  # Si el inventario está abierto, no procesar otras teclas
 
-            # E — activar diálogo o cerrar respuesta
+            if self.inventario.visible:
+                return
+
+            # E — activar diálogo, confirmar propina o cerrar respuesta
             if event.key == pygame.K_e:
                 for npc in self.npcs:
                     distancia = abs(npc.rect.centerx - self.player.rect.centerx) + \
                                 abs(npc.rect.centery - self.player.rect.centery)
                     if distancia < 150:
-                        if npc.respuesta_activa:
+                        if npc.modo_propina:
+                            npc.confirmar_propina()
+                        elif npc.respuesta_activa:
                             npc.cerrar_respuesta()
                         else:
                             npc.activar()
 
-            # R — cerrar diálogo
+            # R — cerrar diálogo o saltar propina
             if event.key == pygame.K_r:
                 for npc in self.npcs:
-                    npc.hablando = False
-                    npc.nodo_actual = "inicio"
-                    npc.esperando_opcion = False
-                    npc.respuesta_activa = None
+                    if npc.modo_propina:
+                        npc.saltar_propina()
+                    else:
+                        npc._resetear()
 
-            # 1, 2, 3 — elegir opción de respuesta
+            # Flechas — ajustar propina
+            if event.key == pygame.K_UP:
+                for npc in self.npcs:
+                    if npc.modo_propina:
+                        npc.ajustar_propina("arriba")
+
+            if event.key == pygame.K_DOWN:
+                for npc in self.npcs:
+                    if npc.modo_propina:
+                        npc.ajustar_propina("abajo")
+
+            # 1, 2, 3, 4 — elegir opción de respuesta
             if event.key == pygame.K_1:
                 for npc in self.npcs:
                     npc.elegir_opcion(0)
@@ -74,11 +86,14 @@ class TavernScene:
             if event.key == pygame.K_3:
                 for npc in self.npcs:
                     npc.elegir_opcion(2)
+            if event.key == pygame.K_4:
+                for npc in self.npcs:
+                    npc.elegir_opcion(3)
 
     def update(self, dt):
-        #si el inventario esta abierto se pausa el juego
         if self.inventario.visible:
             return
+
         old_x = self.player.x
         old_y = self.player.y
 
