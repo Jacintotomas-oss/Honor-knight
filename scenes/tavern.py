@@ -2,12 +2,16 @@ import pygame
 from mecanicas.Player import Player
 from mecanicas.npc import NPC
 from mecanicas.tavernero import Tavernero
+from mecanicas.wallet import wallet
+from mecanicas.inventario import Inventario
 
 class TavernScene:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
         self.player = Player(100, 100)
+        self.wallet = wallet(creditos_iniciales=1000)
+        self.inventario = Inventario(self.wallet)
 
         # NPC estático del bardo en la taberna
         self.npcs = [
@@ -34,6 +38,12 @@ class TavernScene:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
+            #abrir y cerrar inventario
+            if event.key == pygame.K_i:
+                self.inventario.toggle()
+                return
+            if self.inventario.visible:
+                return  # Si el inventario está abierto, no procesar otras teclas
 
             # E — activar diálogo o cerrar respuesta
             if event.key == pygame.K_e:
@@ -66,6 +76,9 @@ class TavernScene:
                     npc.elegir_opcion(2)
 
     def update(self, dt):
+        #si el inventario esta abierto se pausa el juego
+        if self.inventario.visible:
+            return
         old_x = self.player.x
         old_y = self.player.y
 
@@ -92,6 +105,7 @@ class TavernScene:
             npc.draw(self.screen)
 
         self.player.draw(self.screen)
+        self.inventario.draw(self.screen)
 
         # ── DEBUG: ver rectángulos de colisión ──
         # for obstaculo in self.obstaculos:
