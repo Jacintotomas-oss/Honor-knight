@@ -7,7 +7,7 @@ class NPC:
         self.y = y
         self.nombre = nombre
         self.speed = 100
-        self.wallet = wallet  # referencia al wallet del jugador
+        self.wallet = wallet
 
         self.sprite_sheet = pygame.image.load(sprite_path).convert_alpha()
         self.sprite_sheet = pygame.transform.scale(self.sprite_sheet, (128, 128))
@@ -17,16 +17,14 @@ class NPC:
             datos = json.load(f)
         self.dialogos = datos.get(self.nombre, {})
 
-        # Estado del diálogo
         self.hablando = False
         self.nodo_actual = "inicio"
         self.esperando_opcion = False
         self.respuesta_activa = None
-        self.mensaje_error = None  # "Sin fondos suficientes"
+        self.mensaje_error = None
 
-        # Estado propina
         self.modo_propina = False
-        self.propina_valor = 5  # valor inicial
+        self.propina_valor = 5
 
         self.font = pygame.font.SysFont("Arial", 16)
         self.font_opciones = pygame.font.SysFont("Arial", 14)
@@ -63,7 +61,6 @@ class NPC:
         opcion = opciones[indice]
         costo = opcion.get("costo", 0)
 
-        # Verificar si tiene fondos
         if costo > 0 and self.wallet:
             if not self.wallet.gastar(costo):
                 self.mensaje_error = f"No tienes suficientes créditos. ({costo} cr)"
@@ -97,14 +94,12 @@ class NPC:
             self.esperando_opcion = True
 
     def ajustar_propina(self, direccion):
-        """Sube o baja la propina con flechas ↑↓."""
         if direccion == "arriba":
             self.propina_valor = min(15, self.propina_valor + 1)
         else:
             self.propina_valor = max(5, self.propina_valor - 1)
 
     def confirmar_propina(self):
-        """Presionar E confirma la propina."""
         if self.wallet:
             if self.wallet.gastar(self.propina_valor):
                 self.modo_propina = False
@@ -117,29 +112,34 @@ class NPC:
             self._resetear()
 
     def saltar_propina(self):
-        """Presionar R salta la propina."""
         self.modo_propina = False
         self._resetear()
 
     def draw(self, screen):
+        # Solo dibuja el sprite, la burbuja se dibuja por separado
         screen.blit(self.sprite_sheet, (self.x, self.y))
+
+    def draw_burbuja(self, screen):
+        # Se llama después de dibujar todos los sprites
         if self.hablando or self.modo_propina:
             self._dibujar_burbuja(screen)
 
     def _dibujar_burbuja(self, screen):
         padding = 10
-        max_ancho = 280
+        max_ancho = 400
         alto_texto = self.font.get_height()
         alto_opciones = self.font_opciones.get_height()
 
-        # Modo propina
         if self.modo_propina:
-            lineas = ["¿Desea dejar una propina?"]
             ancho_burbuja = max_ancho
             alto_burbuja = padding * 2 + alto_texto * 2 + 60
 
             bx = self.x + 64 - ancho_burbuja // 2
             by = self.y - alto_burbuja - 15
+
+            # Evitar que se salga de los bordes
+            bx = max(5, min(bx, 800 - ancho_burbuja - 5))
+            by = max(5, by)
 
             pygame.draw.rect(screen, (255, 255, 255), (bx, by, ancho_burbuja, alto_burbuja), border_radius=8)
             pygame.draw.rect(screen, (80, 50, 20), (bx, by, ancho_burbuja, alto_burbuja), 2, border_radius=8)
@@ -158,7 +158,6 @@ class NPC:
                 screen.blit(error, (bx + padding, by + alto_burbuja - alto_opciones * 2 - padding))
             return
 
-        # Modo normal
         nodo = self.dialogos.get(self.nodo_actual, {})
         texto_principal = self.respuesta_activa if self.respuesta_activa else nodo.get("texto", "...")
         opciones = [] if self.respuesta_activa else nodo.get("opciones", [])
@@ -176,6 +175,10 @@ class NPC:
         bx = self.x + 64 - ancho_burbuja // 2
         by = self.y - alto_burbuja - 15
 
+        # Evitar que se salga de los bordes
+        bx = max(5, min(bx, 800 - ancho_burbuja - 5))
+        by = max(5, by)
+
         pygame.draw.rect(screen, (255, 255, 255), (bx, by, ancho_burbuja, alto_burbuja), border_radius=8)
         pygame.draw.rect(screen, (80, 50, 20), (bx, by, ancho_burbuja, alto_burbuja), 2, border_radius=8)
 
@@ -183,7 +186,6 @@ class NPC:
             sup = self.font.render(linea, True, (0, 0, 0))
             screen.blit(sup, (bx + padding, by + padding + i * alto_texto))
 
-        # Mensaje error sin fondos
         if self.mensaje_error:
             error = self.font_opciones.render(self.mensaje_error, True, (200, 50, 50))
             screen.blit(error, (bx + padding, by + alto_burbuja + 5))

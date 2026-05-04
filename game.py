@@ -15,4 +15,6 @@ class Game:
         self.current_scene.update(dt)
     #funcion draw esto va a dibujar en la pantalla
     def draw(self):
+        #dibujar pantalla completa al jugar
         self.current_scene.draw()
+        

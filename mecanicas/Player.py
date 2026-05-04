@@ -1,11 +1,14 @@
 import pygame
-
+from mecanicas.status import Status  # ← ruta correcta
 
 class Player:
     def __init__(self, x, y):
         self.x = x
+        self.status = Status(max_health=100)
         self.y = y
         self.speed = 200
+
+        
 
         # Carga del sprite sheet de movimiento
         self.sprite_sheet = pygame.image.load(

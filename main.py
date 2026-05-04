@@ -6,7 +6,7 @@ pygame.init()
 
 ANCHO = 800
 ALTO = 600
-pantalla = pygame.display.set_mode((ANCHO, ALTO))
+pantalla = pygame.display.set_mode((ANCHO, ALTO), pygame.FULLSCREEN)
 pygame.display.set_caption("Honor Knight")
 
 reloj = pygame.time.Clock()
@@ -22,6 +22,10 @@ while ejecutando:
         if evento.type == pygame.QUIT:
             ejecutando = False
         game.handle_event(evento)
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_p:
+                pygame.display.toggle_fullscreen()
+
 
     game.update(dt)
     game.draw()
