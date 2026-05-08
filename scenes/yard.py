@@ -4,6 +4,7 @@ from mecanicas.npc import NPC
 from mecanicas.inventario import Inventario
 from mecanicas.status import Status
 from mecanicas.wallet import Wallet
+from mecanicas.women import WomanNPC
 
 class YardScene:
     def __init__(self, game):
@@ -23,14 +24,32 @@ class YardScene:
 
         #colisiones del entorno
         self.obstaculos = [
-           pygame.Rect(93, 480, 260, 42),  # zona 1
-            pygame.Rect(20, 2, 216, 100),  # zona 2
-            pygame.Rect(811, 11, 156, 195),  # zona 3
-            pygame.Rect(802, 589, 175, 115),  # zona 4
-            pygame.Rect(82, 442, 164, 53),  # zona 5
-            pygame.Rect(167, 518, 164, 33),  # zona 6
-
+           pygame.Rect(138, 440, 108, 90),  # zona 1
+            pygame.Rect(248, 438, 20, 102),  # zona 2
+            pygame.Rect(273, 477, 43, 92),  # zona 3
+            pygame.Rect(83, 443, 73, 78),  # zona 4
+            pygame.Rect(35, 17, 185, 40),  # zona 5
+            pygame.Rect(822, 5, 162, 205),  # zona 6
         ]
+        #coliciones de la mujer
+        self.women_obstaculos = [
+            pygame.Rect(450, 300, 128, 128),  # zona de la mujer
+        ]
+
+
+
+        #cargando npcs con wallet conectado
+        self.npcs = [
+            NPC(590, 340, "bardo", wallet=self.wallet),
+        ]
+        #cargando npcs de mujer
+        self.women_npcs = [
+            WomanNPC(450, 300, "plebe", wallet=self.wallet),
+        ]
+       
+
+
+
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -62,6 +81,12 @@ class YardScene:
                 self.player.y = old_y
                 self.player.rect.topleft = (self.player.x, self.player.y)
 
+        for women_obstacul in self.women_obstaculos:
+            if self.player.rect.colliderect(women_obstacul):
+                self.player.x = old_x
+                self.player.y = old_y
+                self.player.rect.topleft = (int(old_x), int(old_y))
+
         #regresar a la escena anterior
         if self.player.y < -50:
             from scenes.tavernYard import TavernYardScene
@@ -73,9 +98,17 @@ class YardScene:
         self.player.draw(self.screen)
         self.inventario.draw(self.screen)
         self.status.draw(self.screen)
-    
+
+        #añadiremos el sprite de mujer 
+        self.women_npcs[0].draw(self.screen)       
+
+        for woman_npc in self.women_npcs:
+            woman_npc.draw(self.screen)
+
         for obstaculo in self.obstaculos:
             pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
             pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
             #for npc in self.npcs:
              #       pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
+            for woman_npc in self.women_npcs:
+                    pygame.draw.rect(self.screen, (255, 0, 255), woman_npc.rect, 2)

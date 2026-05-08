@@ -1,0 +1,21 @@
+{
+    "plebe": {
+        "inicio":{
+            "texto": "Hola? puedo ayudarte en algo?",
+            "opciones": [
+                {
+                    "texto_tom": "tu cuidas los caballos? (5 cr)",
+                    "respuesta_npc": "Si, por 5 créditos puedo cuidar de tus caballos mientras estás en la ciudad.",
+                    "siguiente": "cuidado_caballos",
+                    "costo": 5
+                },
+                {
+                    "texto_tom": "Solo estoy mirando, gracias.",
+                    "respuesta_npc": "Como guste, caballero. Aquí estaré cuando me necesite.",
+                    "siguiente": "propina",
+                    "costo": 0
+                }
+            ]
+        }
+    }
+}

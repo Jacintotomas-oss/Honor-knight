@@ -29,6 +29,7 @@ class NPC:
         self.font = pygame.font.SysFont("Arial", 16)
         self.font_opciones = pygame.font.SysFont("Arial", 14)
 
+
     def verificar_distancia(self, player_rect):
         distancia = abs(self.rect.centerx - player_rect.centerx) + \
                     abs(self.rect.centery - player_rect.centery)
