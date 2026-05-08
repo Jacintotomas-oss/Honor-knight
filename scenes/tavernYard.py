@@ -6,11 +6,12 @@ from mecanicas.wallet import Wallet
 from mecanicas.inventario import Inventario
 from mecanicas.status import Status
 
-class TavernScene:
+#carga el fondo del patio de la taberna
+class TavernYardScene:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
-        self.player = Player(100, 100)
+        self.player = Player(100, 100)#esto carga al jugador junto con su sprite sheet y su sprite idle, ademas de configurar su animacion y su caja de colisiones
         self.wallet = Wallet(creditos_iniciales=1000)
         self.inventario = Inventario(self.wallet)
         self.status = Status(max_health=100)
@@ -21,20 +22,26 @@ class TavernScene:
             Tavernero(wallet=self.wallet)
         ]
 
-        # Cargar la imagen de fondo de la taberna
-        self.background = pygame.image.load("assets/backgrounds/tavern.png").convert()
-        #musica del fondo 
-        pygame.mixer.music.load("assets/sounds/t1.mp3")
-        pygame.mixer.music.play(-1)
-        # Rectángulos de colisión del entorno
+        
+
+        # Cargar la imagen de fondo del patio de la taberna
+        self.background = pygame.image.load("assets/backgrounds/tavern_Yard.png").convert()
+        #musica del fondo
+        #pygame.mixer.music.load("assets/sounds/t1.mp3")
+        
+        #posicion incial del jugador en el patio de la taberna
+        self.player.x = 200
+        self.player.y = 260
+
+        #colisiones del entorno
         self.obstaculos = [
-            pygame.Rect(98, 283, 190, 112),
-            pygame.Rect(282, 529, 175, 130),
-            pygame.Rect(514, 276, 412, 24),
-            pygame.Rect(769, 61, 230, 145),
-            pygame.Rect(471, 82, 287, 25),
-            pygame.Rect(790, 451, 68, 399),
-            pygame.Rect(61, 77, 698, 15),
+            pygame.Rect(11, 18, 998, 111),  # zona 1
+            pygame.Rect(313, 207, 367, 69),  # zona 2
+            pygame.Rect(49, 207, 127, 67),  # zona 3
+            pygame.Rect(856, 198, 142, 71),  # zona 4
+            pygame.Rect(51, 707, 80, 47),  # zona 5
+            pygame.Rect(838, 707, 151, 49),  # zona 6
+            pygame.Rect(329, 733, 293, 38),  # zona 7
         ]
 
     def handle_event(self, event):
@@ -110,44 +117,43 @@ class TavernScene:
 
         self.player.update(dt)
         self.status.update(dt)
-
-        # Colisión con NPCs
-        for npc in self.npcs:
-            if self.player.rect.colliderect(npc.rect):
-                self.player.x = old_x
-                self.player.y = old_y
-                self.player.rect.topleft = (int(old_x), int(old_y))
-
-        # Colisión con entorno
-        for obstaculo in self.obstaculos:
-            if self.player.rect.colliderect(obstaculo):
-                self.player.x = old_x
-                self.player.y = old_y
-                self.player.rect.topleft = (int(old_x), int(old_y))
-        #cambio de escena a tavernYard.py al irse afuera de la escena
-        # al moverse al costado cambia de escena vamos a cambiar que sea para adelante 
-        if self.player.y > 500: 
-            from scenes.tavernYard import TavernYardScene
-            self.game.change_scene(TavernYardScene(self.game))
-
+        # Colisiones con obstáculos
+        for obstacul in self.obstaculos:
+            if self.player.rect.colliderect(obstacul):
+                    self.player.x = old_x
+                    self.player.y = old_y
+                    self.player.rect.topleft = (int(old_x), int(old_y))
+        #cambio de escena 
+        if self.player.y > 500:
+            from scenes.yard import YardScene
+            self.game.change_scene(YardScene(self.game))
+        #regresar a la escena anterior
+        if self.player.x < -50:
+            from scenes.tavern import TavernScene
+            self.game.change_scene(TavernScene(self.game))
+            #posicion del jugador al regresar a la taberna
+            self.player.x = 750
+            self.player.y = 250
     def draw(self):
             self.screen.blit(self.background, (0, 0))
 
             # Primero todos los sprites
-            for npc in self.npcs:
-                npc.draw(self.screen)
+            #los npc no se cargaran en esta escena
+            #for npc in self.npcs:
+             #   npc.draw(self.screen)
             self.player.draw(self.screen)
 
             # Luego las burbujas encima de todo
-            for npc in self.npcs:
-                npc.draw_burbuja(self.screen)
+            #for npc in self.npcs:
+             #   npc.draw_burbuja(self.screen)
 
             self.inventario.draw(self.screen)
             self.status.draw(self.screen)
 
-        # ── DEBUG: ver rectángulos de colisión ──
-        # for obstaculo in self.obstaculos:
-        #     pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
-        # pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
-        # for npc in self.npcs:
-        #     pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
+            #for obstaculo in self.obstaculos:
+             #   pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
+              #  pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
+                #for npc in self.npcs:
+                 #   pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
+
+

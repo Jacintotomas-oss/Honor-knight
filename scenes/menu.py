@@ -29,7 +29,7 @@ class MenuScene:
     def handle_event(self, evento):
         if self.mostrando_intro:
             return  # bloquea input durante la intro
-
+        
         if evento.type == pygame.KEYDOWN:
 
             if evento.key == pygame.K_UP:
@@ -41,8 +41,7 @@ class MenuScene:
                 self.opcion_seleccionada += 1
                 if self.opcion_seleccionada >= len(self.opciones):
                     self.opcion_seleccionada = 0
-
-            if evento.key == pygame.K_RETURN:
+            if evento.key == pygame.K_RETURN: 
                 if self.opciones[self.opcion_seleccionada] == "Empezar":
                     self.mostrando_intro = True
                     self.mensaje_timer = 0
@@ -78,6 +77,7 @@ class MenuScene:
                 True, (255, 255, 255)
 
             #mostrar otro fondo negro indicando la fecha y el lugar de la taverna
+            
              
             )
             superficie.set_alpha(alpha)
