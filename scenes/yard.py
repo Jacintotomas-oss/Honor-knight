@@ -11,7 +11,7 @@ class YardScene:
         self.game = game
         self.screen = game.screen
         self.player = Player(100, 100)
-        self.wallet = Wallet(creditos_iniciales=1000)
+        self.wallet = game.wallet
         self.inventario = Inventario(self.wallet)
         self.status = Status(max_health=100)
 
@@ -124,7 +124,7 @@ class YardScene:
         #regresar a la escena anterior
         if self.player.y < -50:
             from scenes.tavernYard import TavernYardScene
-            self.game.change_scene(TavernYardScene(self.game))
+            self.game.change_scene(self.game.get_scene("tavernYard", TavernYardScene))
 
 
     def draw(self):

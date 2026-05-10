@@ -5,6 +5,7 @@ from mecanicas.tavernero import Tavernero
 from mecanicas.wallet import Wallet
 from mecanicas.inventario import Inventario
 from mecanicas.status import Status
+from mecanicas.objetos import Objeto
 
 #carga el fondo del patio de la taberna
 class TavernYardScene:
@@ -12,9 +13,21 @@ class TavernYardScene:
         self.game = game
         self.screen = game.screen
         self.player = Player(100, 100)#esto carga al jugador junto con su sprite sheet y su sprite idle, ademas de configurar su animacion y su caja de colisiones
-        self.wallet = Wallet(creditos_iniciales=1000)
+        self.wallet = game.wallet
         self.inventario = Inventario(self.wallet)
         self.status = Status(max_health=100)
+        nuevo_objeto = Objeto()
+        nuevo_objeto.nombre = "bolsa de peniques"
+        #sprite del objeto
+        nuevo_objeto.sprite = pygame.image.load("assets/iconos/wallet/bolsa.png")
+
+                #posicion y tamaño del sprite del objeto
+        nuevo_objeto.rect = nuevo_objeto.sprite.get_rect()
+        nuevo_objeto.rect.topleft = (400, 420)
+        nuevo_objeto.sprite = pygame.transform.scale(nuevo_objeto.sprite, (32, 32))
+        nuevo_objeto.rect = nuevo_objeto.sprite.get_rect(topleft=(400, 420))  # ← rect actualizado
+        #lista de objetos en el mundo del juego
+        self.objetos_mundo = [nuevo_objeto]
 
         # NPCs con wallet conectado
         self.npcs = [
@@ -106,7 +119,18 @@ class TavernYardScene:
             if event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT:
                 self.status.toggle()
                 return
-
+       
+            if event.key == pygame.K_f:
+                print("F presionado")
+                for item in self.objetos_mundo:
+                    print(f"item en: {item.rect.centerx}, {item.rect.centery}")
+                    print(f"jugador en: {self.player.rect.centerx}, {self.player.rect.centery}")
+                    distancia = abs(item.rect.centerx - self.player.rect.centerx) + \
+                                abs(item.rect.centery - self.player.rect.centery)
+                    if distancia < 150:
+                        self.wallet.items.append(item) 
+                        self.objetos_mundo.remove(item)
+                        self.wallet.ganar(50, "Recogiste una bolsa de peniques")
 
     def update(self, dt):
         if self.inventario.visible:
@@ -126,16 +150,22 @@ class TavernYardScene:
         #cambio de escena 
         if self.player.y > 500:
             from scenes.yard import YardScene
-            self.game.change_scene(YardScene(self.game))
+            self.game.change_scene(self.game.get_scene("yard", YardScene))
         #regresar a la escena anterior
         if self.player.x < -50:
             from scenes.tavern import TavernScene
-            self.game.change_scene(TavernScene(self.game))
+            self.game.change_scene(self.game.get_scene("tavern", TavernScene))
             #posicion del jugador al regresar a la taberna
             self.player.x = 750
             self.player.y = 250
+        
     def draw(self):
             self.screen.blit(self.background, (0, 0))
+
+            for item in self.objetos_mundo:
+                if item.sprite and item.rect:
+                    self.screen.blit(item.sprite, item.rect)
+
 
             # Primero todos los sprites
             #los npc no se cargaran en esta escena
@@ -150,6 +180,7 @@ class TavernYardScene:
             self.inventario.draw(self.screen)
             self.status.draw(self.screen)
 
+           
             #for obstaculo in self.obstaculos:
              #   pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
               #  pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)

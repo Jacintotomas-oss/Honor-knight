@@ -1,4 +1,5 @@
 import pygame
+from .objetos import Objeto
 
 class Inventario:
     def __init__(self, wallet):
@@ -7,7 +8,16 @@ class Inventario:
         self.font_titulo = pygame.font.SysFont("Arial", 28)
         self.font = pygame.font.SysFont("Arial", 18)
         self.font_small = pygame.font.SysFont("Arial", 15)
-    
+
+    #hacemos un update donde puedas añadir objetos al inventario, el objeto vendra de la clase objetos.py
+    def update(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_f:
+                #recogemos un objeto y lo agregamos al inventario los objetos los crearemos en las escenas aqui solo la logica para agregarlo al inventario
+                pass
+                
+
+
     def toggle(self):
         self.visible = not self.visible
     def draw(self, screen):
@@ -74,7 +84,7 @@ class Inventario:
         if self.wallet.items:
             for item in self.wallet.items:
                 item_texto = self.font_small.render(
-                    f"  • {item['nombre']}  x{item['cantidad']}", True, (210, 190, 150))
+                    f"  • {item.nombre}  x{item.cantidad}", True, (210, 190, 150))
                 screen.blit(item_texto, (panel_x + 30, y))
                 y += 22
         else:

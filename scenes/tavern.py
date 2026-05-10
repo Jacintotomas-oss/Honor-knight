@@ -11,7 +11,7 @@ class TavernScene:
         self.game = game
         self.screen = game.screen
         self.player = Player(100, 100)
-        self.wallet = Wallet(creditos_iniciales=1000)
+        self.wallet = game.wallet
         self.inventario = Inventario(self.wallet)
         self.status = Status(max_health=100)
 
@@ -128,7 +128,7 @@ class TavernScene:
         # al moverse al costado cambia de escena vamos a cambiar que sea para adelante 
         if self.player.y > 500: 
             from scenes.tavernYard import TavernYardScene
-            self.game.change_scene(TavernYardScene(self.game))
+            self.game.change_scene(self.game.get_scene("tavernYard", TavernYardScene))
 
     def draw(self):
             self.screen.blit(self.background, (0, 0))
