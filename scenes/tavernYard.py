@@ -31,7 +31,7 @@ class TavernYardScene:
         
         #posicion incial del jugador en el patio de la taberna
         self.player.x = 200
-        self.player.y = 260
+        self.player.y = 280
 
         #colisiones del entorno
         self.obstaculos = [

@@ -88,6 +88,8 @@ class Status:
         if self.infectado:
             self.recibir_dano(dt * 0.1)
 
+        #aqui se agregaran enfermedades 
+
     # ── UI ──
 
     def toggle(self):

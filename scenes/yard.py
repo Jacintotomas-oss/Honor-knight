@@ -53,18 +53,52 @@ class YardScene:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            # Abrir/cerrar inventario
             if event.key == pygame.K_i:
                 self.inventario.toggle()
                 return
-
             if self.inventario.visible:
                 return
-        if event.type == pygame.KEYDOWN:
-            #status con shift
             if event.key == pygame.K_LSHIFT:
                 self.status.toggle()
                 return
+            if event.key == pygame.K_e:
+                for npc in self.women_npcs:
+                    distancia = abs(npc.rect.centerx - self.player.rect.centerx) + \
+                                abs(npc.rect.centery - self.player.rect.centery)
+                    if distancia < 300:
+                        if npc.modo_propina:
+                            npc.confirmar_propina()
+                        elif npc.respuesta_activa:
+                            npc.cerrar_respuesta()
+                        else:
+                            npc.activar()
+            if event.key == pygame.K_r:
+                for npc in self.women_npcs:
+                    if npc.modo_propina:
+                        npc.saltar_propina()
+                    else:
+                        npc._resetear()
+            if event.key == pygame.K_UP:
+                for npc in self.women_npcs:
+                    if npc.modo_propina:
+                        npc.ajustar_propina("arriba")
+            if event.key == pygame.K_DOWN:
+                for npc in self.women_npcs:
+                    if npc.modo_propina:
+                        npc.ajustar_propina("abajo")
+            if event.key == pygame.K_1:
+                for npc in self.women_npcs:
+                    npc.elegir_opcion(0)
+            if event.key == pygame.K_2:
+                for npc in self.women_npcs:
+                    npc.elegir_opcion(1)
+            if event.key == pygame.K_3:
+                for npc in self.women_npcs:
+                    npc.elegir_opcion(2)
+            if event.key == pygame.K_4:
+                for npc in self.women_npcs:
+                    npc.elegir_opcion(3)
+         
 
     def update(self, dt):
         if self.inventario.visible:
@@ -99,16 +133,25 @@ class YardScene:
         self.inventario.draw(self.screen)
         self.status.draw(self.screen)
 
+
         #añadiremos el sprite de mujer 
         self.women_npcs[0].draw(self.screen)       
 
         for woman_npc in self.women_npcs:
             woman_npc.draw(self.screen)
 
-        for obstaculo in self.obstaculos:
-            pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
-            pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
+        #burbujas de dialogo
+        for npc in self.women_npcs:
+            npc.draw_burbuja(self.screen)
+
+        #burbujas
+        for npc in self.npcs:
+            npc.draw_burbuja(self.screen)
+
+       # for obstaculo in self.obstaculos:
+        #    pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
+         #   pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
             #for npc in self.npcs:
              #       pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
-            for woman_npc in self.women_npcs:
-                    pygame.draw.rect(self.screen, (255, 0, 255), woman_npc.rect, 2)
+          #  for woman_npc in self.women_npcs:
+           #         pygame.draw.rect(self.screen, (255, 0, 255), woman_npc.rect, 2)
