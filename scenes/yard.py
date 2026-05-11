@@ -125,6 +125,10 @@ class YardScene:
         if self.player.y < -50:
             from scenes.tavernYard import TavernYardScene
             self.game.change_scene(self.game.get_scene("tavernYard", TavernYardScene))
+        #cambio de escena a Act1
+        if self.player.y > 650:
+            from scenes.Act1 import Act1Scene
+            self.game.change_scene(self.game.get_scene("act1", Act1Scene))
 
 
     def draw(self):
