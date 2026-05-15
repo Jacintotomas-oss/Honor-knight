@@ -46,7 +46,11 @@ class Act1Scene(MenuScene):
                 self.player.y = old_y
                 self.player.rect.topleft = (self.player.x, self.player.y)
             #regresar a la escena anterior
-            pass
+        
+        #cambio de escena
+        if self.player.y > 500:
+            from scenes.Select import Select_Option
+            self.game.change_scene(self.game.get_scene("Select", Select_Option))
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         self.player.draw(self.screen)
