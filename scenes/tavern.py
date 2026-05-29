@@ -26,6 +26,12 @@ class TavernScene:
         #musica del fondo 
         pygame.mixer.music.load("assets/sounds/t1.mp3")
         pygame.mixer.music.play(-1)
+
+        self.sonido_taberna = pygame.mixer.Sound("assets/sounds/sonidoTavern.wav")
+        self.sonido_taberna.set_volume(10.0)
+        self.sonido_taberna.play(loops=-1)
+
+        
         # Rectángulos de colisión del entorno
         self.obstaculos = [
             pygame.Rect(98, 283, 190, 112),

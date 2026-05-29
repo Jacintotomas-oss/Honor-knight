@@ -75,6 +75,8 @@ class MenuScene:
                 pygame.mixer.music.stop()
                 from scenes.tavern import TavernScene
                 self.game.change_scene(TavernScene(self.game))
+                self.mostrando_intro = False
+                return
 
     def draw(self):
         self.screen.fill(self.COLOR_FONDO)
@@ -90,7 +92,7 @@ class MenuScene:
                 alpha = 255
 
             sup = self.font_msg.render(
-                "Honor Knight  —  By Jacinto Cortez  —  2025",
+                "Honor Knight  —  By Jacinto Cortez  —  2026",
                 True, self.COLOR_ORO
             )
             sup.set_alpha(alpha)
