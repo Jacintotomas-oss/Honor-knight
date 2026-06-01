@@ -154,11 +154,15 @@ class TavernYardScene:
         #regresar a la escena anterior
         if self.player.x < -50:
             from scenes.tavern import TavernScene
-            self.game.change_scene(self.game.get_scene("tavern", TavernScene))
-            #posicion del jugador al regresar a la taberna
-            self.player.x = 750
-            self.player.y = 250
-        
+            # limpiar caché para que se recree limpia
+            if "tavern" in self.game.escenas:
+                del self.game.escenas["tavern"]
+            nueva_escena = TavernScene(self.game)
+            nueva_escena.player.x = 600
+            nueva_escena.player.y = 470
+            nueva_escena.player.rect.topleft = (600, 470)
+            self.game.change_scene(nueva_escena)
+            
     def draw(self):
             self.screen.blit(self.background, (0, 0))
 

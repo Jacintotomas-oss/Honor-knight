@@ -63,9 +63,9 @@ class Act1Scene(MenuScene):
         self.player.draw(self.screen)
 
 
-        for obstaculo in self.obstaculos:
-            pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
-            pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
+        #for obstaculo in self.obstaculos:
+         #   pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
+          #  pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
             
 
         

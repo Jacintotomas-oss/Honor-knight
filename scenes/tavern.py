@@ -132,10 +132,12 @@ class TavernScene:
                 self.player.rect.topleft = (int(old_x), int(old_y))
         #cambio de escena a tavernYard.py al irse afuera de la escena
         # al moverse al costado cambia de escena vamos a cambiar que sea para adelante 
-        if self.player.y > 500: 
+        if self.player.y > 500:
+            if "tavernYard" in self.game.escenas:
+                del self.game.escenas["tavernYard"]
             from scenes.tavernYard import TavernYardScene
-            self.game.change_scene(self.game.get_scene("tavernYard", TavernYardScene))
-
+            nueva_escena = TavernYardScene(self.game)
+            self.game.change_scene(nueva_escena)
     def draw(self):
             self.screen.blit(self.background, (0, 0))
 
@@ -152,8 +154,8 @@ class TavernScene:
             self.status.draw(self.screen)
 
         # ── DEBUG: ver rectángulos de colisión ──
-        # for obstaculo in self.obstaculos:
-        #     pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
-        # pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
-        # for npc in self.npcs:
-        #     pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
+            #for obstaculo in self.obstaculos:
+                #pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
+                #pygame.draw.rect(self.screen, (0, 255, 0), self.player.rect, 2)
+            #for npc in self.npcs:
+                #pygame.draw.rect(self.screen, (0, 0, 255), npc.rect, 2)
