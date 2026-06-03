@@ -7,6 +7,7 @@ from mecanicas.inventario import Inventario
 from mecanicas.status import Status
 from mecanicas.objetos import Objeto
 
+
 #carga el fondo del patio de la taberna
 class TavernYardScene:
     def __init__(self, game):
@@ -27,13 +28,18 @@ class TavernYardScene:
         nuevo_objeto.sprite = pygame.transform.scale(nuevo_objeto.sprite, (32, 32))
         nuevo_objeto.rect = nuevo_objeto.sprite.get_rect(topleft=(400, 420))  # ← rect actualizado
         #lista de objetos en el mundo del juego
-        self.objetos_mundo = [nuevo_objeto]
+
+        if nuevo_objeto.nombre not in self.game.save["objetosRecogidos"]:
+            self.objetos_mundo = [nuevo_objeto]
+        else:
+            self.objetos_mundo = []
 
         # NPCs con wallet conectado
         self.npcs = [
             NPC(590, 340, "bardo", wallet=self.wallet),
             Tavernero(wallet=self.wallet)
         ]
+        
 
         
 
@@ -56,6 +62,8 @@ class TavernYardScene:
             pygame.Rect(838, 707, 151, 49),  # zona 6
             pygame.Rect(329, 733, 293, 38),  # zona 7
         ]
+
+    
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -131,6 +139,12 @@ class TavernYardScene:
                         self.wallet.items.append(item) 
                         self.objetos_mundo.remove(item)
                         self.wallet.ganar(50, "Recogiste una bolsa de peniques")
+
+                        self.game.save["objetosRecogidos"].append(item.nombre)
+                        self.game.save["creditos"]= self.wallet.creditos
+                        self.game.save_game()
+
+                
 
     def update(self, dt):
         if self.inventario.visible:

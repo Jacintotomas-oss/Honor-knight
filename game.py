@@ -14,6 +14,8 @@ class Game:
             with open("assets/JSON/save.json", "r") as f:
                 self.save = json.load(f)
 
+        
+
 
         else:
             # crear valores por defecto
@@ -28,7 +30,7 @@ class Game:
         
     def save_game(self):
         with open("assets/JSON/save.json", "w") as f:
-            json.dump(self.save, f, identity = 4)
+            json.dump(self.save, f, indent = 4)
 
     def get_scene(self, nombre, clase):
         if nombre not in self.escenas:

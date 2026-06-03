@@ -1,6 +1,8 @@
 {
-    "creditos" : 1000,
-    "objetosRecogidos": [],
+    "creditos": 1050,
+    "objetosRecogidos": [
+        "bolsa de peniques"
+    ],
     "escenaActual": "tavern",
     "jugador_x": 100,
     "jugador_y": 100

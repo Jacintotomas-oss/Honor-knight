@@ -25,6 +25,7 @@ class TavernScene:
         self.background = pygame.image.load("assets/backgrounds/tavern.png").convert()
         #musica del fondo 
         pygame.mixer.music.load("assets/sounds/t1.mp3")
+        pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
 
         self.sonido_taberna = pygame.mixer.Sound("assets/sounds/sonidoTavern.wav")
