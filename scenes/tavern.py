@@ -29,8 +29,11 @@ class TavernScene:
         pygame.mixer.music.play(-1)
 
         self.sonido_taberna = pygame.mixer.Sound("assets/sounds/sonidoTavern.wav")
-        self.sonido_taberna.set_volume(10.0)
+        self.sonido_taberna.set_volume(9.0)
         self.sonido_taberna.play(loops=-1)
+
+        self.sonido_hablar = pygame.mixer.Sound("assets/sounds/gruñidoTavern.mp3")
+        self.sonido_hablar.set_volume(4.5)
 
         
         # Rectángulos de colisión del entorno
@@ -42,6 +45,7 @@ class TavernScene:
             pygame.Rect(471, 82, 287, 25),
             pygame.Rect(790, 451, 68, 399),
             pygame.Rect(61, 77, 698, 15),
+            pygame.Rect(22, 75, 12, 801),
         ]
 
     def handle_event(self, event):
@@ -57,10 +61,12 @@ class TavernScene:
 
             # E — activar diálogo, confirmar propina o cerrar respuesta
             if event.key == pygame.K_e:
+                
                 for npc in self.npcs:
                     distancia = abs(npc.rect.centerx - self.player.rect.centerx) + \
                                 abs(npc.rect.centery - self.player.rect.centery)
                     if distancia < 150:
+                        self.sonido_hablar.play()
                         if npc.modo_propina:
                             npc.confirmar_propina()
                         elif npc.respuesta_activa:

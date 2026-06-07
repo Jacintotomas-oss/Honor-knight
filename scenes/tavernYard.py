@@ -61,6 +61,7 @@ class TavernYardScene:
             pygame.Rect(51, 707, 80, 47),  # zona 5
             pygame.Rect(838, 707, 151, 49),  # zona 6
             pygame.Rect(329, 733, 293, 38),  # zona 7
+            pygame.Rect(776, 142, 10, 701),
         ]
 
     

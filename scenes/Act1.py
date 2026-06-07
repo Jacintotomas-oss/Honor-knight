@@ -32,6 +32,8 @@ class Act1Scene(MenuScene):
         pygame.Rect(793, 507, 109, 62),  # zona 7
         pygame.Rect(2, 258, 265, 113),  # zona 8
         pygame.Rect(756, 233, 265, 140),  # zona 9
+        pygame.Rect(26, 5, 11, 588),  
+        pygame.Rect(815, 6, 15, 578),  
 ]
         
 

@@ -12,7 +12,7 @@ class Player:
 
         # Carga del sprite sheet de movimiento
         self.sprite_sheet = pygame.image.load(
-            "assets/sprites/Tom/spritesheets.Tom01.png"
+            "assets/sprites/Tom/prueba1.png"
         ).convert_alpha()
 
         sheet_width, sheet_height = self.sprite_sheet.get_size()
@@ -20,7 +20,7 @@ class Player:
 
         # Carga del sprite idle
         idle_raw = pygame.image.load(
-            "assets/sprites/Tom/prota02.png"
+            "assets/sprites/Tom/p(3)2re.png"
         ).convert_alpha()
         self.idle_sprite = pygame.transform.scale(idle_raw, (128, 128))
 
