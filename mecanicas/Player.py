@@ -33,6 +33,12 @@ class Player:
 
         print(f"Frame size: {self.frame_width}x{self.frame_height}")
 
+        #sonido al caminar
+        self.sonido_caminar = pygame.mixer.Sound("assets/sounds/walk1.wav")
+        self.sonido_caminar.set_volume(2.5)
+
+        self.sonido_reproduciendo = False
+
         # ─── Mapeo de filas según lo que se ve en el spritesheet ───
         # Fila 0 → down  (frente, con "T" en cabeza)
         # Fila 1 → up    (de espaldas / capa)
@@ -82,6 +88,7 @@ class Player:
             self.y -= self.speed * dt
             self.direction = "up"
             moving = True
+
         elif keys[pygame.K_s]:
             self.y += self.speed * dt
             self.direction = "right"
@@ -91,6 +98,7 @@ class Player:
             self.x -= self.speed * dt
             self.direction = "left"
             moving = True
+
         elif keys[pygame.K_d]:
             self.x += self.speed * dt
             self.direction = "down"
@@ -105,10 +113,15 @@ class Player:
                 frames = self.animations[self.direction]
                 self.current_frame = (self.current_frame + 1) % len(frames)
             self.image = self.animations[self.direction][self.current_frame]
+
+            if not pygame.mixer.Channel(0).get_busy():
+                pygame.mixer.Channel(0).play(self.sonido_caminar)
+                
         else:
             self.animation_timer = 0
             self.current_frame   = 0
             self.image = self.idle_sprite
+            pygame.mixer.Channel(0).stop()
 
     # ──────────────────────────────────────────────
     def draw(self, screen):

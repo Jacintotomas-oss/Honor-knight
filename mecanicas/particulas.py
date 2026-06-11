@@ -15,14 +15,36 @@ class Particulas:  #clase padre para particulas
         self.oscilacion = 0.0  # para el movimiento oscilante de las hojas
         self.vx = random.uniform(-1.5, 1.5)  # velocidad horizontal aleatoria sera entre 0.3 y 1.5
         self.vy = random.uniform(0.5, 0.5)  # velocidad vertical aleatoria (caída)
+        self.ancho = self.tamano * 2  # valor por defecto
 
 
         if self.tipo == "hoja":
-            self.color = (34, 139, 34)  # verde para hojas
+            self.color = (20, 100, 20)  # verde para hojas
 
         elif self.tipo == "chispas":
             self.color = (255, 215, 0)  # dorado para chispas
-        
+
+        elif self.tipo == "neblina":
+            self.vx = random.uniform(-0.2, 0.2)   # movimiento horizontal lento
+            self.vy = random.uniform(-0.02, 0.02)  # casi sin movimiento vertical
+            self.radio = random.randint(130, 220)
+            self.duracion = random.uniform(10.0, 18.0)  # vive más tiempo
+            self.color =  random.choice([
+                (140, 150, 170),  # gris azulado medio
+                (120, 130, 155),  # un poco más oscuro
+                (100, 110, 135),  # el más oscuro de los tres
+   # casi negro azulado                    
+            ])           
+             # Precalcular las 6 capas una sola vez
+            self.capas_sup = []
+            for i in range(6, 0, -1):
+                factor = i / 6
+                rx = int(self.radio * factor)
+                ry = int(rx * 0.45)
+                sup = pygame.Surface((rx * 2, ry * 2), pygame.SRCALPHA)
+                pygame.draw.ellipse(sup, (*self.color, 45), (0, 0, rx * 2, ry * 2))
+                self.capas_sup.append((sup, rx, ry))
+                        
 
         
     def update (self, dt): #en update se actualiza la posición y la vida de la partícula
@@ -36,26 +58,27 @@ class Particulas:  #clase padre para particulas
             # multiplicado por 0.5 da un vaivén suave de lado a lado
             self.y += self.vy  # siempre cae hacia abajo
 
+        elif self.tipo == "neblina":
+            self.x += self.vx
+            self.y += self.vy
+
     def EstaViva(self): #método para saber si la partícula sigue viva
         return self.vida > 0
 
-    def draw(self, screen): #se dibuja la partícula con un círculo que se desvanece según su vida
-        alpha = int(max(0, min(255, self.vida * 200)))
-        # self.vida va de 1.0 a 0.0
-        # multiplicado por 200 da un alpha entre 200 y 0
-        # max(0, ...) evita valores negativos
-        # min(255, ...) evita pasar de 255
+    def draw(self, screen):
+        if self.tipo == "neblina":
+            alpha_global = int(self.vida * 180)
+            for sup_base, rx, ry in self.capas_sup:
+                sup = sup_base.copy()
+                sup.set_alpha(alpha_global)
+                screen.blit(sup, (int(self.x - rx), int(self.y - ry)))
 
-        sup = pygame.Surface((self.tamano * 2, self.tamano * 2), pygame.SRCALPHA)
-        # SRCALPHA permite transparencia en la superficie
-
-        pygame.draw.circle(sup, (*self.color, alpha), (self.tamano, self.tamano), self.tamano)
-        # *self.color desempaqueta (R, G, B) y le agrega el alpha → (R, G, B, alpha)
-
-        screen.blit(sup, (int(self.x - self.tamano), int(self.y - self.tamano)))
-        # resta self.tamano para centrar el círculo en x,y
-
-
+        else:
+            # hojas, chispas, etc.
+            alpha = int(max(0, min(255, self.vida * 255)))
+            sup = pygame.Surface((self.ancho, self.tamano * 2), pygame.SRCALPHA)
+            pygame.draw.rect(sup, (*self.color, alpha), (0, 0, self.ancho, self.tamano * 2))
+            screen.blit(sup, (int(self.x - self.tamano), int(self.y - self.tamano)))
 #clase sistema Particulas
 
 class SistemaParticulas:
@@ -78,8 +101,9 @@ class SistemaParticulas:
             emisor["timer"] += dt
             if emisor["timer"] >= emisor["intervalo"]:
                 emisor["timer"] = 0
-                self.particulas.append(Particulas(emisor["x"], emisor["y"], emisor["tipo"]))
-
+                import random
+                offset_x = random.randint(-60, 60)
+                self.particulas.append(Particulas(emisor["x"] + offset_x, emisor["y"], emisor["tipo"]))
         for particula in self.particulas:
             particula.update(dt)
         # Eliminar partículas muertas

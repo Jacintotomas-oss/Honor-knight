@@ -28,12 +28,15 @@ class TavernScene:
         pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
 
+        self.canal_taberna = pygame.mixer.Channel(1)
+        self.canal_hablar = pygame.mixer.Channel(2)
+
         self.sonido_taberna = pygame.mixer.Sound("assets/sounds/sonidoTavern.wav")
-        self.sonido_taberna.set_volume(9.0)
-        self.sonido_taberna.play(loops=-1)
+        self.sonido_taberna.set_volume(0.9)
+        self.canal_taberna.play(self.sonido_taberna, loops=-1)
 
         self.sonido_hablar = pygame.mixer.Sound("assets/sounds/gruñidoTavern.mp3")
-        self.sonido_hablar.set_volume(4.5)
+        self.sonido_hablar.set_volume(0.45)
 
         
         # Rectángulos de colisión del entorno
@@ -66,7 +69,7 @@ class TavernScene:
                     distancia = abs(npc.rect.centerx - self.player.rect.centerx) + \
                                 abs(npc.rect.centery - self.player.rect.centery)
                     if distancia < 150:
-                        self.sonido_hablar.play()
+                        self.canal_hablar.play(self.sonido_hablar)
                         if npc.modo_propina:
                             npc.confirmar_propina()
                         elif npc.respuesta_activa:
