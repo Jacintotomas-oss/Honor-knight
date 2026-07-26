@@ -48,26 +48,7 @@ class WomanNPC(NPC):
             self.esperando_opcion = True
             self.respuesta_activa = None
     
-    def elegir_opcion(self, indice):
-        if not self.esperando_opcion:
-              return
-        nodo = self.dialogos.get(self.nodo_actual, {})
-        opciones = nodo.get("opciones", [])
-        if indice >= len(opciones):
-                return
-        
-        opcion = opciones[indice]
-        costo = opcion.get("costo", 0)
-        
-        if costo > 0 and self.wallet:
-            if not self.wallet.gastar(costo):
-                self.mensaje_error = "No tienes suficiente dinero"
-                return
-            
-
-        self.mensaje_error = None
-        self.respuesta_activa = opcion["respuesta_npc"]
-        self.esperando_opcion = False       
+   
 
     def cerrar_respuesta(self):
         if not self.respuesta_activa:

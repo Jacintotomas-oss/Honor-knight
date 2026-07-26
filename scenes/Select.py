@@ -33,6 +33,8 @@ class Select_Option:
         self.muy_pronto_timer = 0.0
         self.muy_pronto_duracion = 3.0
 
+        self.cap1_precargado = None
+
     def _opcion_rect(self, i):
         ancho_item = 220
         alto_item = 44
@@ -117,12 +119,17 @@ class Select_Option:
                 pygame.mixer.music.load("assets/sounds/prologo.mp3")
                 pygame.mixer.music.play()
 
+        if self.mostrando_audio and self.cap1_precargado is None:
+            from scenes.Cap1 import Cap1
+            self.cap1_precargado = Cap1(self.game)
+
         if self.mostrando_audio:
             self.audio_timer += dt
             if self.audio_timer >= self.audio_duracion:
                 pygame.mixer.music.stop()
-                from scenes.Cap1 import Cap1
-                self.game.change_scene(Cap1(self.game))
+                self.game.change_scene(self.cap1_precargado)
+                self.cap1_precargado.iniciar_musica()
+                    
 
         # Timer del mensaje "Muy pronto"
         if self.mostrando_muy_pronto:

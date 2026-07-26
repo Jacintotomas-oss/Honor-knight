@@ -6,6 +6,7 @@ from mecanicas.particulas import SistemaParticulas
 
 
 
+
 class Cap1:
     def __init__(self,game):
         self.game = game
@@ -51,14 +52,18 @@ class Cap1:
 
 
 
+
+
+    def handle_event(self,event):
+        pass
+
+    def iniciar_musica(self):
+        
         #musica de fondo 
         pygame.mixer.music.load("assets/sounds/prologoMusic.mp3")
         pygame.mixer.music.set_volume(0.6)
         pygame.mixer.music.play(-1)
 
-
-    def handle_event(self,event):
-        pass
     def update (self,dt):
 
         old_x = self.P1.x
@@ -80,6 +85,10 @@ class Cap1:
             if self.fade_timer >= self.fade_duracion:
                 self.fade_alpha = 0
                 self.fade_activo = False
+
+        if self.P1.y > 500:
+            from scenes.CapB import CapB
+            self.game.change_scene(self.game.get_scene("CapB", CapB))
         
 
     def draw (self):

@@ -39,6 +39,11 @@ class TavernYardScene:
             NPC(590, 340, "bardo", wallet=self.wallet),
             Tavernero(wallet=self.wallet)
         ]
+
+        # Jomsviking 
+        self.npcs =[
+            
+        ]
         
 
         

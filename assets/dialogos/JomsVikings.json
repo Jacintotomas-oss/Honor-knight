@@ -1,0 +1,29 @@
+{
+    "jomsviking": {
+        "inicio": {
+            "texto": "¿ Nos Conocemos amigo ? ",
+            "opciones":[
+
+                {
+                    "texto_tom": "No, Soy Tom, que los Dioses lo acompañen.",
+                    "respuesta_Jomsviking": "Mucho Gusto, Soy un guerrero Jomsviking"
+                },
+                {
+                    "texto_tom": "¿Me puedes hablar sobre los Jomsviking?",
+                    "respuesta_Jomsviking": "¿Te falta capacidad? Los Jomsvikings somos una de las mayores fuerzas mercenarias del mundo, Hemos luchado aqui, en el mar del norte y todos los mares mas haya del norte incluso en el puto Oriente y en todos lados"
+
+                },
+                {
+                    "texto_tom": "Impresionante, quien es su comandante?",
+                    "respuesta_Jomsviking": "nuestro comandante es Herlath 'El Rojo' estamos aqui cerrando nuestro trato con la corona y abandonando el frente de guerra en la costa Oeste, ya que Los bastardos de los Hijos de Invierno se han retirado y los seguiremos"
+                },
+                {
+                    "texto_tom": "Que los Dioses los cuiden en su viaje",
+                    "respuesta_Jomsviking": "Gracias, amigo, que los Dioses te acompañen en tu viaje"
+                }
+
+            ]
+
+        }
+    }
+}

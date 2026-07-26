@@ -14,6 +14,10 @@ class Game:
             with open("assets/JSON/save.json", "r") as f:
                 self.save = json.load(f)
 
+                # sincronizar wallet con el save
+                self.wallet.creditos = self.save["creditos"]
+
+            
         
 
 
@@ -40,6 +44,11 @@ class Game:
     #funcion paraa cambiar de escena
     def change_scene(self, new_scene):
         self.current_scene = new_scene
+            #cambio de escena actual en json
+        nombre = type(new_scene).__name__  # ← __name__ da el nombre como string
+        self.save ["escenaActual"] = nombre
+        self.save_game()
+
     #funcion hande_event esto va a manejar los eventos del juego
     def handle_event(self, event):
         if self.current_scene:
