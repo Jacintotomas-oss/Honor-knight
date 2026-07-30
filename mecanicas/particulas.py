@@ -54,6 +54,7 @@ class Particulas:
                 (255, 140, 0),
                 (255, 80, 0)
             ])
+        
 
         elif self.tipo == "neblina":
             self.vx = random.uniform(-0.2, 0.2)
@@ -101,6 +102,11 @@ class Particulas:
         elif self.tipo == "fuego":
             self.x += self.vx
             self.y += self.vy
+        elif self.tipo == "tierra":
+            self.oscilacion += dt
+            self.x += self.vx
+            self.y += self.vy + math.sin(self.oscilacion) * 0.3
+            self.vy += dt * 3  # gravedad
 
     def EstaViva(self):
         return self.vida > 0

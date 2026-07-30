@@ -10,6 +10,11 @@ class Inventario:
         self.font_small = pygame.font.SysFont("Arial", 15)
         self.item_seleccionado = None
         self.item_rects = []  # rects de cada item para detectar clic
+        self.menu_activo = False  # muestra el menu contextual 
+        self.menu_pos = (0,0) #posicion
+        self.accion_pendiente = None
+        self.menu_rects = []
+       
 
     def toggle(self):
         self.visible = not self.visible
@@ -19,11 +24,27 @@ class Inventario:
     def handle_event(self, event):
         if not self.visible:
             return
+
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Si el menú contextual está activo
+            if self.menu_activo and hasattr(self, 'menu_rects'):
+                opciones = ["Tomar", "Dejar", "Ver"]
+                for i, rect in enumerate(self.menu_rects):
+                    if rect.collidepoint(event.pos):
+                        self.accion_pendiente = (opciones[i], self.item_seleccionado)
+                        self.menu_activo = False
+                        return
+                # Si clic fuera del menú lo cierra
+                self.menu_activo = False
+                return
+
+            # Clic en un item
             for i, rect in enumerate(self.item_rects):
                 if rect.collidepoint(event.pos):
                     if i < len(self.wallet.items):
                         self.item_seleccionado = self.wallet.items[i]
+                        self.menu_activo = True
+                        self.menu_pos = event.pos
 
     def draw(self, screen):
         if not self.visible:
@@ -133,3 +154,32 @@ class Inventario:
         screen.blit(cerrar, (
             panel_x + panel_w // 2 - cerrar.get_width() // 2,
             panel_y + panel_h - 28))
+        if self.menu_activo and self.item_seleccionado:
+            opciones = ["Tomar", "Dejar", "Ver"]
+            mx, my = self.menu_pos
+            ancho_menu = 120
+            alto_opcion = 28
+            alto_menu = alto_opcion * len(opciones)
+
+            # Fondo del menú
+            pygame.draw.rect(screen, (25, 18, 10),
+                             (mx, my, ancho_menu, alto_menu), border_radius=6)
+            pygame.draw.rect(screen, (139, 90, 43),
+                             (mx, my, ancho_menu, alto_menu), 1, border_radius=6)
+
+            mouse_pos = pygame.mouse.get_pos()
+            self.menu_rects = []
+
+            for i, opcion in enumerate(opciones):
+                rect_op = pygame.Rect(mx, my + i * alto_opcion, ancho_menu, alto_opcion)
+                self.menu_rects.append(rect_op)
+
+                # Hover
+                if rect_op.collidepoint(mouse_pos):
+                    pygame.draw.rect(screen, (60, 38, 15), rect_op, border_radius=4)
+
+                texto_op = self.font_small.render(opcion, True, (220, 190, 120))
+                screen.blit(texto_op, (
+                    mx + 12,
+                    my + i * alto_opcion + alto_opcion // 2 - texto_op.get_height() // 2
+                ))

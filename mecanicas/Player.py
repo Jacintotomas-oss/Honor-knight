@@ -7,6 +7,7 @@ class Player:
         self.status = Status(max_health=100)
         self.y = y
         self.speed = 200
+        self.modo_cavar = False
 
         
 
@@ -81,6 +82,9 @@ class Player:
 
     # ──────────────────────────────────────────────
     def update(self, dt):
+        if self.modo_cavar:
+            self.rect.topleft = (int(self.x), int(self.y))
+            return
         keys = pygame.key.get_pressed()
         moving = False
 

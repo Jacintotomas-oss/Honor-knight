@@ -17,6 +17,13 @@ class CapB:
         self.dialogo_e_disponible = None  # "bebe" o "mujer"
         self.background = pygame.image.load("assets/backgrounds/Cap1.2.png").convert_alpha()
 
+        self.menu_activo = False  # muestra el menu contextual
+        self.item_seleccionado = None  # item seleccionado en el inventario
+
+        if self.menu_activo and self.item_seleccionado:
+            opciones = ["Tomar", "Dejar", "Ver"]
+            # dibujas los 3 botones en menu_pos
+
         # ── Colisiones ──
         self.obstaculos = [
             pygame.Rect(59, 797, 934, 125),
@@ -120,6 +127,37 @@ class CapB:
 
         if self.inventario.visible or self.status.visible:
             return
+        accion = self.inventario.accion_pendiente
+        if accion:
+            tipo, item = accion
+            if tipo == "Tomar" and item.nombre == "Pala":
+                self.P1.modo = "pala"
+                #sprite con pala
+                sprite_pala_raw = pygame.image.load("assets/sprites/p1/pala.png").convert_alpha()
+                self.P1.idle_sprite = pygame.transform.scale(sprite_pala_raw, (128, 128))
+                self.P1.image = self.P1.idle_sprite
+
+                #spritesheet caminado con la pala
+                self.P1.sprite_sheet = pygame.image.load(
+                    "assets/sprites/p1/pala1c.png"
+                ).convert_alpha()
+
+                # Recalcular dimensiones del nuevo spritesheet
+                sheet_width, sheet_height = self.P1.sprite_sheet.get_size()
+                self.P1.frame_width = sheet_width // self.P1.columns
+                self.P1.frame_height = sheet_height // self.P1.rows
+                # Regenerar animaciones con el nuevo spritesheet
+                self.P1.animations = {
+                "down":  [self.P1.get_frame(col, 0) for col in range(4)],
+                "up":    [self.P1.get_frame(col, 1) for col in range(4)],
+                "left":  [self.P1.get_frame(col, 2) for col in range(4)],
+                "right": [self.P1.get_frame(col, 3) for col in range(4)],
+}
+
+                self.P1.rect = pygame.Rect(self.P1.x, self.P1.y, 128, 128)
+            elif tipo == "Dejar":
+                self.wallet.items.remove(item)
+            self.inventario.accion_pendiente = None
 
         old_x = self.P1.x
         old_y = self.P1.y
@@ -127,6 +165,7 @@ class CapB:
         self.P1.update(dt)
         self.status.update(dt)
         self.particulas.update(dt)
+        
 
         # ── Colisiones ──
         for obstacul in self.obstaculos:
@@ -183,6 +222,11 @@ class CapB:
             self.muerte_timer = 0.0
             self.fade_muerte = 0
 
+         #regresar a la escena anterior
+        if self.P1.y < -50:
+            from scenes.Cap1 import Cap1
+            self.game.change_scene(self.game.get_scene("Cap1", Cap1))
+
     def draw(self):
         self.screen.blit(self.background, (0, 0))
 
@@ -222,10 +266,11 @@ class CapB:
             ))
 
         # DEBUG
-        for obstaculo in self.obstaculos:
-            pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
-        pygame.draw.rect(self.screen, (0, 255, 0), self.P1.rect, 2)
-        pygame.draw.rect(self.screen, (255, 165, 0), self.fogata_rect, 2)
+        #for obstaculo in self.obstaculos:
+         #   pygame.draw.rect(self.screen, (255, 0, 0), obstaculo, 2)
+        #pygame.draw.rect(self.screen, (0, 255, 0), self.P1.rect, 2)
+        #pygame.draw.rect(self.screen, (255, 165, 0), self.fogata_rect, 2)
+
 
     def _dibujar_dialogo(self, texto):
         padding = 10
