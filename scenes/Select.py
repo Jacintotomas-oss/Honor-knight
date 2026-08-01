@@ -17,7 +17,7 @@ class Select_Option:
         self.fuente_footer   = pygame.font.SysFont("Arial", 11)
         self.font_msg        = pygame.font.SysFont("Georgia", 20)
 
-        self.opciones = ["Empezar Capitulo 1","juego libre","Regresar"]
+        self.opciones = ["Empezar Capitulo 1","juego libre","Destinos","Regresar"]
         self.opcion_seleccionada = 0
 
         self.mostrando_intro = False
@@ -148,6 +148,9 @@ class Select_Option:
         elif self.opciones[i] == "juego libre":
             self.mostrando_muy_pronto = True
             self.muy_pronto_timer = 0.0
+
+        elif self.opciones[i] == "Destinos":
+            pass
 
         elif self.opciones[i] == "Regresar":
             from scenes.Act1 import Act1Scene
